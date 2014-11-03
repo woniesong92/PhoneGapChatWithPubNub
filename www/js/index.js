@@ -37,7 +37,7 @@ var app = {
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        console.log('Received Event: ' + id);
+        // console.log('Received Event: ' + id);
 
         var pubnub = PUBNUB.init({
             channel: "chat",
@@ -49,6 +49,12 @@ var app = {
             channel: 'chat',
             message: handleMessage
         });
+
+        var sendMessageButton = $('#sendMessageButton');
+        sendMessageButton.click(function() {
+            console.log("clicked!");
+            handleMessage("hi pubnub record this!!");
+        })
 
         // // Grab references for all of our elements.
         // var messageContent = $('#messageContent'),
@@ -75,9 +81,13 @@ var app = {
      
         // Handles all the messages coming in from pubnub.subscribe.
         function handleMessage(message) {
-            console.log(message);
-            console.log("pubnub is working!!");
-     
+            pubnub.publish({
+                channel: 'chat',
+                messgae: {
+                    username: 'test',
+                    text: message
+                }
+            });
             // Scroll to bottom of page
             // $("html, body").animate({ scrollTop: $(document).height() - $(window).height() }, 'slow');
         };        
